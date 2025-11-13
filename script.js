@@ -1,9 +1,9 @@
 emailjs.init("7FLSkJKbCg6jSUBeu");
 
 const form = document.getElementById("contact-form");
-const senderName = document.getElementById("user_name")
-const senderEmail = document.getElementById("user_email")
-const content = document.getElementById("message")
+const senderName = document.getElementById("user_name");
+const senderEmail = document.getElementById("user_email");
+const content = document.getElementById("message");
 const status = document.getElementById("form-status");
 
 form.addEventListener("submit", function (e) {
