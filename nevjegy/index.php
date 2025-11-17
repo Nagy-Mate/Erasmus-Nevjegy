@@ -1,3 +1,45 @@
+<?php
+  $status = "";
+  $errors = [];
+
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+      if (empty($_POST['user_name'])) $errors[] = "A név megadása kötelező!";
+      else $name = $_POST['user_name'];
+
+      if (empty($_POST['user_email']) || !filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
+          $errors[] = "Érvénytelen email cím!";
+      }
+      else $email = $_POST['user_email'];
+
+      if (empty($_POST['message']) || strlen($_POST['message']) < 5) {
+          $errors[] = "Az üzenet túl rövid!";
+      }
+      else $message = $_POST['message'];
+
+      if (!empty($errors)) {
+          $status = "<div class='alert alert-danger'>" . implode("<br>", $errors) . "</div>";
+      } 
+      else {
+          $headers  = "MIME-Version: 1.0\r\n";
+          $headers .= "Content-type: text/plain; charset=UTF-8\r\n";
+          $headers .= "From: noreply@startupcovasna.ro\r\n";
+          $headers .= "Reply-To: ".$email."\r\n";
+
+          if (mail("morsakk.mate@gmail.com", "Contact: $email Name: $name", $message, $headers)) {
+              header("Location: ?success=1");
+              exit;
+          } else {
+              $status = "<div class='alert alert-danger'>Hiba történt az üzenet küldése közben.</div>";
+          }
+      }
+  }
+
+  if (isset($_GET['success'])) {
+      $status = "<div class='alert alert-success'>Üzenet sikeresen elküldve!</div>";
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="hu">
   <head>
@@ -18,7 +60,9 @@
   <body>
     <main>
       <div class="lux-card">
-        <div class="card-bg"></div>
+        <div id="form-status">
+          <?php if (!empty($status)) echo $status; ?>
+        </div>
 
         <div class="profile">
           <img src="./img/profile.jpg" alt="Nagy Máté" class="avatar" />
@@ -104,7 +148,7 @@
 
         <section class="contact-form">
           <h3 class="section-title">Get in Touch</h3>
-          <form id="contact-form" action="index.php" method="POST">
+          <form id="contact-form" method="POST">
             <div class="form-group">
               <input
                 type="text"
@@ -136,44 +180,8 @@
               <i class="bi bi-send"></i> Üzenet küldése
             </button>
           </form>
-          <div id="form-status">
-            <?php if (!empty($status)) echo $status; ?>
-          </div>
         </section>
       </div>
-      <?php
-      $status = "";
-      $errors = [];
-      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-          if (empty($_POST['user_name'])) $errors[] = "A név megadása kötelező!";
-          else $name = $_POST['user_name'];
-
-          if (empty($_POST['user_email']) || !filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL)) {
-              $errors[] = "Érvénytelen email cím!";
-          }
-          else $email = $_POST['user_email'];
-          
-          if (empty($_POST['message']) || strlen($_POST['message']) < 5) {
-              $errors[] = "Az üzenet túl rövid!";
-          }
-          else $message = $_POST['message'];
-          
-             if (!empty($errors)) {
-        $status = "<div class='alert alert-danger'>" . implode("<br>", $errors) . "</div>";
-    } 
-    else {
-
-        if (mail("morsakk.mate@gmail.com", "Contact: ".$email, $message)) {
-            $status = "<div class='alert alert-success'>Üzenet sikeresen elküldve!</div>";
-        } else {
-            $status = "<div class='alert alert-danger'>Hiba történt az üzenet küldése közben.</div>";
-        }
-    }
-    
-    
-  }
-  ?>
     </main>
   </body>
 </html>
