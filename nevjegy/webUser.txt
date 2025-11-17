@@ -1,0 +1,6 @@
+cím: ftp.startupcovasna.ro
+felhasználónév: diak5@vv.startupcovasna.ro
+jelszo: gW7]CBr9w$61lSog
+Port: 21
+
+web: https://vv.startupcovasna.ro/nagymate/
