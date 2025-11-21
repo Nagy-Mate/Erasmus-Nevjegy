@@ -1,0 +1,13 @@
+FileZilla belépés: 
+    cím:            ftp.startupcovasna.ro
+    felhasználónév: diak5@vv.startupcovasna.ro
+    jelszo:         gW7]CBr9w$61lSog
+    Port:           21
+
+Cpanel belépés:
+    link:           https://startupcovasna.ro/cpanel
+    felhasználónév: startupc
+    jelszo:         :L32Oss76P:Yji
+
+
+web: https://vv.startupcovasna.ro/nagymate/

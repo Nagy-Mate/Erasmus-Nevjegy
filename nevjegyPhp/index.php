@@ -2,6 +2,14 @@
   $status = "";
   $errors = [];
 
+  $servername = "localhost"; 
+  $username = "startupc_vv-diak"; 
+  $password = "OYi!La@41bhI3Fdw"; 
+  $dbname = "startupc_vv"; 
+  $tablename = "nmate";
+
+
+
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       if (empty($_POST['user_name'])) $errors[] = "A név megadása kötelező!";
@@ -26,7 +34,28 @@
           $headers .= "From: noreply@startupcovasna.ro\r\n";
           $headers .= "Reply-To: ".$email."\r\n";
 
+          try {
+            $db = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+          } catch (PDOException $e) {
+              die("Database connection failed: " . $e->getMessage());
+          }
+
+          $db->exec("
+              CREATE TABLE IF NOT EXISTS $tablename (
+                  id INT AUTO_INCREMENT PRIMARY KEY,
+                  name VARCHAR(255) NOT NULL,
+                  email VARCHAR(255) NOT NULL,
+                  message TEXT NOT NULL,
+                  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+              ) ENGINE=InnoDB CHARSET=utf8mb4;
+          ");
+
           if (mail("morsakk.mate@gmail.com", "Contact: $email Name: $name", $message, $headers)) {
+
+              $stmt = $db->prepare("INSERT INTO $tablename (name, email, message) VALUES (?, ?, ?)");
+              $stmt->execute([$name, $email, $message]);
+
               header("Location: ?success=1");
               exit;
           } else {
