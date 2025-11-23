@@ -37,19 +37,20 @@
           try {
             $db = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8", $username, $password);
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $db->exec("
+                CREATE TABLE IF NOT EXISTS $tablename (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    name VARCHAR(255) NOT NULL,
+                    email VARCHAR(255) NOT NULL,
+                    message TEXT NOT NULL,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                ) ENGINE=InnoDB CHARSET=utf8mb4;
+            ");
           } catch (PDOException $e) {
               die("Database connection failed: " . $e->getMessage());
           }
 
-          $db->exec("
-              CREATE TABLE IF NOT EXISTS $tablename (
-                  id INT AUTO_INCREMENT PRIMARY KEY,
-                  name VARCHAR(255) NOT NULL,
-                  email VARCHAR(255) NOT NULL,
-                  message TEXT NOT NULL,
-                  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-              ) ENGINE=InnoDB CHARSET=utf8mb4;
-          ");
 
           if (mail("morsakk.mate@gmail.com", "Contact: $email Name: $name", $message, $headers)) {
 
