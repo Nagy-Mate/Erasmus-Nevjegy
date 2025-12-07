@@ -127,7 +127,7 @@
           <h3 class="section-title">Közösségi Média</h3>
           <div class="social-grid">
             <a
-              href="https://m.me/profile.php?id=100061482573856"
+              href="https://m.me/100061482573856"
               target="_blank"
               ><i class="bi bi-messenger"></i
             ></a>
